@@ -1,11 +1,11 @@
 name: 'build and push go'
 on:
-  pull_request:
   push:
-    # branches:
-    # - main
-    path:
+    branches:
+    - main
+    paths:
     - 'src/go/**'
+  workflow_dispatch:
 
 env:
   DOCKERHUB_NAMESPACE: levizebulon
