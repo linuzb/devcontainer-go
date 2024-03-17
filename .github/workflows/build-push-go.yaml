@@ -2,8 +2,8 @@ name: 'build and push go'
 on:
   pull_request:
   push:
-    branches:
-    - main
+    # branches:
+    # - main
     path:
     - 'src/go/**'
 
