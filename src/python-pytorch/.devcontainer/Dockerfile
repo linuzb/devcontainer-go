@@ -6,20 +6,6 @@ FROM continuumio/miniconda3 as upstream
     # https://github.com/advisories/<CVE_ID>
     # <package_name> = <version>
 
-RUN python3 -m pip install --upgrade \
-    pip \
-    # https://github.com/advisories/GHSA-6vqw-3v5j-54x4
-    cryptography==42.0.4 \
-    # installed for compatibility with cryptography v42.0.4
-    pyopenssl==24.0.0 \
-    && pip install torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 \
-    && pip install d2l==0.17.6
-
-# [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
-COPY requirements.txt /tmp/pip-tmp/
-RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-   && rm -rf /tmp/pip-tmp
-
 # Reset and copy updated files with updated privs to keep image size down
 FROM mcr.microsoft.com/devcontainers/base:1-bullseye
 
@@ -55,7 +41,9 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         openssh-client \
         procps \
         subversion \
-        wget \    
+        wget \
+        python3-pip \
+        python3-dev \
     && apt-get upgrade -y \
     && bash /tmp/library-scripts/add-notice.sh \
     # && mv -f "/tmp/library-scripts/meta.env" /usr/local/etc/vscode-dev-containers/meta.env \
@@ -64,12 +52,17 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && echo "conda activate base" >> ~/.bashrc \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/add-notice.sh
 
+RUN python3 -m pip install --upgrade pip && \
+    pip install torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 && \
+    pip install d2l==0.17.6 jupyter
+
+# [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
+COPY requirements.txt /tmp/pip-tmp/
+RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+   && rm -rf /tmp/pip-tmp
+
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
 COPY environment.yml* noop.txt /tmp/conda-tmp/
 RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
     && rm -rf /tmp/conda-tmp
-
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
