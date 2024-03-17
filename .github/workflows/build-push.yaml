@@ -55,7 +55,7 @@ jobs:
           devcontainer build \
             --workspace-folder '.' \
             --platform linux/amd64,linux/arm64 \
-            --image-name=${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:go-${{ env.APP_VERSION }} \
-            --image-name=${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:latest \
+            --image-name=${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:go-${{ env.APP_VERSION }} \
+            --image-name=${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:latest \
             --log-level debug \
             --push
