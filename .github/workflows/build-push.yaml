@@ -52,6 +52,5 @@ jobs:
             --workspace-folder '.' \
             --platform linux/amd64,linux/arm64 \
             --image-name=${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:go-${{ env.APP_VERSION }} \
-            --image-name=${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:latest \
-            --log-level debug \
-            --push
+            --log-level trace \
+            --push true
