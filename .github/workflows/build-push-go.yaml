@@ -4,7 +4,7 @@ on:
   push:
     branches:
     - main
-    path：
+    path:
     - 'src/go/**'
 
 env:
