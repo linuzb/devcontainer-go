@@ -49,14 +49,14 @@ jobs:
 
       - name: Install @devcontainers/cli
         run: npm install -g @devcontainers/cli
-        
+
       - name: Build image
         run: |
           devcontainer build \
             --workspace-folder '.' \
             --platform linux/amd64,linux/arm64 \
-            --image-name={{ env.DOCKERHUB_REGISTRY }}/{{ env.DOCKERHUB_NAMESPACE }}/{{ env.DOCKERHUB_REPO }}:go-{{ env.APP_VERSION }} \
-            --image-name={{ env.DOCKERHUB_REGISTRY }}/{{ env.DOCKERHUB_NAMESPACE }}/{{ env.DOCKERHUB_REPO }}:latest \
+            --image-name=${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:go-${{ env.APP_VERSION }} \
+            --image-name=${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:latest \
             --output type=docker \
             --log-level debug \
             --push
