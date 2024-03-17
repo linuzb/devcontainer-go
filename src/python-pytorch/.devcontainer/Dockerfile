@@ -12,7 +12,8 @@ RUN python3 -m pip install --upgrade \
     cryptography==42.0.4 \
     # installed for compatibility with cryptography v42.0.4
     pyopenssl==24.0.0 \
-    && pip3 install torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 
+    && pip install torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 \
+    && pip install d2l==0.17.6
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 COPY requirements.txt /tmp/pip-tmp/
