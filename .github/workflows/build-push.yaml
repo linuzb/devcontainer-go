@@ -34,7 +34,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
-          registry: {{ env.DOCKERHUB_REGISTRY }}
+          registry: ${{ env.DOCKERHUB_REGISTRY }}
           # GitHub Repo => Settings => Secrets add Docker Hub login key information
           # DOCKERHUB_USERNAME is the Docker Hub username.
           # DOCKERHUB_TOKEN: docker hub => Account Setting => Security => New Access Token.
