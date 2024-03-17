@@ -42,8 +42,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         procps \
         subversion \
         wget \
-        python3-pip \
-        python3-dev \
     && apt-get upgrade -y \
     && bash /tmp/library-scripts/add-notice.sh \
     # && mv -f "/tmp/library-scripts/meta.env" /usr/local/etc/vscode-dev-containers/meta.env \
@@ -52,14 +50,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && echo "conda activate base" >> ~/.bashrc \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/add-notice.sh
 
-RUN python3 -m pip install --upgrade pip && \
-    pip install torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 && \
-    pip install d2l==0.17.6 jupyter
-
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
-COPY requirements.txt /tmp/pip-tmp/
-RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-   && rm -rf /tmp/pip-tmp
+# COPY requirements.txt /tmp/pip-tmp/
+# RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+#    && rm -rf /tmp/pip-tmp
 
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
