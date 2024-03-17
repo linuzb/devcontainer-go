@@ -46,6 +46,10 @@ jobs:
       #     imageName: {{ env.DOCKERHUB_REGISTRY }}/{{ env.DOCKERHUB_NAMESPACE }}/{{ env.DOCKERHUB_REPO }}
       #     imageTag: go-{{ env.APP_VERSION }}
       #     platform: linux/amd64,linux/arm64 
+
+      - name: Install @devcontainers/cli
+        run: npm install -g @devcontainers/cli
+        
       - name: Build image
         run: |
           devcontainer build \
