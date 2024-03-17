@@ -57,6 +57,5 @@ jobs:
             --platform linux/amd64,linux/arm64 \
             --image-name=${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:go-${{ env.APP_VERSION }} \
             --image-name=${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:latest \
-            --output type=docker \
             --log-level debug \
             --push
