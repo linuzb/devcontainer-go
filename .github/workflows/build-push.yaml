@@ -40,9 +40,19 @@ jobs:
           # DOCKERHUB_TOKEN: docker hub => Account Setting => Security => New Access Token.
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and release devcontainer Multi-Platform
-        uses: devcontainers/ci@v0.3
-        with:
-          imageName: {{ env.DOCKERHUB_REGISTRY }}/{{ env.DOCKERHUB_NAMESPACE }}/{{ env.DOCKERHUB_REPO }}
-          imageTag: go-{{ env.APP_VERSION }}
-          platform: linux/amd64,linux/arm64 
+      # - name: Build and release devcontainer Multi-Platform
+      #   uses: devcontainers/ci@v0.3
+      #   with:
+      #     imageName: {{ env.DOCKERHUB_REGISTRY }}/{{ env.DOCKERHUB_NAMESPACE }}/{{ env.DOCKERHUB_REPO }}
+      #     imageTag: go-{{ env.APP_VERSION }}
+      #     platform: linux/amd64,linux/arm64 
+      - name: Build image
+        run: |
+          devcontainer build \
+            --workspace-folder '.' \
+            --platform linux/amd64,linux/arm64 \
+            --image-name={{ env.DOCKERHUB_REGISTRY }}/{{ env.DOCKERHUB_NAMESPACE }}/{{ env.DOCKERHUB_REPO }}:go-{{ env.APP_VERSION }} \
+            --image-name={{ env.DOCKERHUB_REGISTRY }}/{{ env.DOCKERHUB_NAMESPACE }}/{{ env.DOCKERHUB_REPO }}:latest \
+            --output type=docker \
+            --log-level debug \
+            --push
