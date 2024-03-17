@@ -50,7 +50,7 @@ jobs:
       - name: Build image
         run: |
           devcontainer build \
-            --workspace-folder src/${{ env.DOCKERHUB_REPO }} \
+            --workspace-folder ./src/${{ env.WORKLOAD_TYPE }} \
             --image-name=${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:${{ env.WORKLOAD_TYPE }}-${{ env.APP_VERSION }} \
             --image-name=${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:${{ env.WORKLOAD_TYPE }}-latest \
             --log-level trace \
