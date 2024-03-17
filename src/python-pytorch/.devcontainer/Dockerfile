@@ -7,17 +7,17 @@ FROM continuumio/miniconda3 as upstream
     # <package_name> = <version>
 
 RUN python3 -m pip install --upgrade \
+    pip \
     # https://github.com/advisories/GHSA-6vqw-3v5j-54x4
     cryptography==42.0.4 \
     # installed for compatibility with cryptography v42.0.4
     pyopenssl==24.0.0 \
-    && pip install torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 \
-    && pip install d2l==0.17.6
+    && pip3 install torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
-# COPY requirements.txt /tmp/pip-tmp/
-# RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-#    && rm -rf /tmp/pip-tmp
+COPY requirements.txt /tmp/pip-tmp/
+RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+   && rm -rf /tmp/pip-tmp
 
 # Reset and copy updated files with updated privs to keep image size down
 FROM mcr.microsoft.com/devcontainers/base:1-bullseye
