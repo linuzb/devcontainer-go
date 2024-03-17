@@ -19,5 +19,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # install code server
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
-# extensions to code-server
+# code-server install extensions
 RUN code-server --install-extension golang.go
