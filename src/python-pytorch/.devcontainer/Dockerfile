@@ -58,7 +58,7 @@ RUN code-server --install-extension ms-python.python \
 	&& code-server --install-extension ms-python.vscode-pylance \
     && code-server --install-extension ms-toolsai.jupyter
 
-RUN conda install --quiet --freeze-installed pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+RUN conda install -y --quiet --freeze-installed pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
