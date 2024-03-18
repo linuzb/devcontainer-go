@@ -27,9 +27,9 @@ RUN apt-get update --yes \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
-RUN python3 -m pip install --upgrade pip && \
-    pip install torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 && \
-    pip install d2l==0.17.6 jupyter
+RUN python3 -m pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 && \
+    pip install --no-cache-dir d2l==0.17.6 jupyter
 
 # install code server and install extensions
 # RUN curl -fsSL https://code-server.dev/install.sh | sh \
