@@ -22,6 +22,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      # keep space
+      - name: Clean
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
       # Set up QEMU, as it is a dependency for docker buildx.
       - name: Set up QEMU for multi-architecture builds
         uses: docker/setup-qemu-action@v3
