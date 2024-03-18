@@ -1,76 +1,37 @@
-# FROM continuumio/miniconda3 as upstream
+ARG BASE_IMATE=nvidia/cuda:11.6.1-devel-ubuntu20.04
 
-# # Temporary: Upgrade python packages due to mentioned CVEs
-# # They are installed by the base image (continuumio/miniconda3) which does not have the patch.
-# # RUN conda install \ 
-#     # https://github.com/advisories/<CVE_ID>
-#     # <package_name> = <version>
+FROM  ${BASE_IMATE}
 
-# Reset and copy updated files with updated privs to keep image size down
-FROM mcr.microsoft.com/devcontainers/base:1-bookworm
+LABEL pytorch_version=torch==1.12.0+cu116,torchvision==0.13.0+cu116,torchaudio==0.12.0
 
-ARG USERNAME=vscode
+LABEL ubuntu_software=build-essential,wget,pandoc,vim \
+      conda_package=conda-pack,jupyter,jupyterlab
 
-# Create the conda group and add remote user to the group
-# RUN groupadd -r conda --gid 900 \ 
-#     && usermod -aG conda ${USERNAME}
 
-# Copy opt folder, set ownership and group permissions
-# COPY --chown=:conda --chmod=775 --from=upstream /opt/conda /opt/conda
-# RUN chmod =2775 /opt/conda
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
 
-USER root
+# Install base utilities
+RUN apt-get update --yes \
+    && apt-get install --yes --no-install-recommends \
+    build-essential \
+    wget \
+    # - pandoc is used to convert notebooks to html files
+    #   it's not present in the aarch64 Ubuntu image, so we install it here
+    pandoc \
+    vim \
+    git \
+    python3-pip \
+    python3-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy scripts to execute
-COPY add-notice.sh /tmp/library-scripts/
-
-# # Setup conda to mirror contents from https://github.com/ContinuumIO/docker-images/blob/master/miniconda3/debian/Dockerfile
-# ENV LANG=C.UTF-8 \
-#     LC_ALL=C.UTF-8 \
-#     PATH=/opt/conda/bin:$PATH
-ARG USERNAME=vscode
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y --no-install-recommends \
-        bzip2 \
-        ca-certificates \
-        libglib2.0-0 \
-        libsm6 \
-        libxext6 \
-        libxrender1 \
-        mercurial \
-        openssh-client \
-        procps \
-        subversion \
-        wget \
-        python3 \
-        python3-pip \
-    && apt-get upgrade -y \
-    && bash /tmp/library-scripts/add-notice.sh \
-    # && mv -f "/tmp/library-scripts/meta.env" /usr/local/etc/vscode-dev-containers/meta.env \
-    # && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
-    # && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc \
-    # && echo "conda activate base" >> ~/.bashrc \
-    && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/add-notice.sh
+# Upgrade pip
+RUN python3 -m pip install --upgrade pip && \
+    pip install torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 && \
+    pip install d2l==0.17.6 jupyter
 
 # install code server and install extensions
 RUN curl -fsSL https://code-server.dev/install.sh | sh \
     && code-server --install-extension ms-python.python \
 	&& code-server --install-extension ms-python.vscode-pylance \
     && code-server --install-extension ms-toolsai.jupyter
-
-# RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-RUN python3 -m pip install --upgrade pip && \
-    pip install --no-cache-dir torch==1.12.0+cu116 torchvision==0.13.0+cu116 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu116 && \
-    pip install d2l==0.17.6 jupyter
-
-
-# Copy environment.yml (if found) to a temp locaition so we update the environment. Also
-# copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
-# COPY environment.yml* noop.txt /tmp/conda-tmp/
-# RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
-#     && rm -rf /tmp/conda-tmp
-
-# [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
-# COPY requirements.txt noop.txt /tmp/pip-tmp/
-# RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-#    && rm -rf /tmp/pip-tmp
