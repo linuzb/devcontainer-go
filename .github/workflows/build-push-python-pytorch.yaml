@@ -30,8 +30,12 @@ jobs:
       #     remove-docker-images: 'true'
       - name: Remove unnecessary files
         run: |
+          echo "1 Free space:"
+          df -h
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          echo "2 Free space:"
+          df -h
 
       # git checkout code
       - name: Checkout
