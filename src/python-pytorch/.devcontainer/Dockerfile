@@ -67,6 +67,6 @@ RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bi
     && rm -rf /tmp/conda-tmp
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
-# COPY requirements.txt noop.txt /tmp/pip-tmp/
-# RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-#    && rm -rf /tmp/pip-tmp
+COPY requirements.txt noop.txt /tmp/pip-tmp/
+RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+   && rm -rf /tmp/pip-tmp
