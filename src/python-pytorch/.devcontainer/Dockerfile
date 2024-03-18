@@ -14,7 +14,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install base utilities
 RUN apt-get update --yes \
     && apt-get install --yes --no-install-recommends \
-    build-essential \
+    # build-essential \
     wget \
     curl \
     # - pandoc is used to convert notebooks to html files
@@ -32,8 +32,8 @@ RUN python3 -m pip install --upgrade pip && \
     pip install d2l==0.17.6 jupyter
 
 # install code server and install extensions
-RUN curl -fsSL https://code-server.dev/install.sh | sh \
-    && code-server --install-extension ms-python.python \
-	&& code-server --install-extension ms-python.vscode-pylance \
-    && code-server --install-extension ms-toolsai.jupyter \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# RUN curl -fsSL https://code-server.dev/install.sh | sh \
+#     && code-server --install-extension ms-python.python \
+# 	&& code-server --install-extension ms-python.vscode-pylance \
+#     && code-server --install-extension ms-toolsai.jupyter \
+#     && apt-get clean && rm -rf /var/lib/apt/lists/*
