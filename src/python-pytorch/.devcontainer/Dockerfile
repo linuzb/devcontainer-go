@@ -35,4 +35,5 @@ RUN python3 -m pip install --upgrade pip && \
 RUN curl -fsSL https://code-server.dev/install.sh | sh \
     && code-server --install-extension ms-python.python \
 	&& code-server --install-extension ms-python.vscode-pylance \
-    && code-server --install-extension ms-toolsai.jupyter
+    && code-server --install-extension ms-toolsai.jupyter \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
