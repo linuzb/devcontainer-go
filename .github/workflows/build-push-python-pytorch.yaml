@@ -76,6 +76,8 @@ jobs:
 
       - name: Build image
         run: |
+          echo "Free space:"
+          df -h
           devcontainer build \
             --workspace-folder ./src/${{ env.WORKLOAD_TYPE }} \
             --image-name=${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:${{ env.WORKLOAD_TYPE }}-${{ env.APP_VERSION }} \
