@@ -35,9 +35,9 @@ jobs:
           large-packages: false
           swap-storage: false
 
-      # Set up QEMU, as it is a dependency for docker buildx.
-      - name: Set up QEMU for multi-architecture builds
-        uses: docker/setup-qemu-action@v3
+      # # Set up QEMU, as it is a dependency for docker buildx.
+      # - name: Set up QEMU for multi-architecture builds
+      #   uses: docker/setup-qemu-action@v3
 
       # Set up Docker buildx to facilitate the building of multi-platform images.
       - name: Setup Docker buildx for multi-architecture builds
