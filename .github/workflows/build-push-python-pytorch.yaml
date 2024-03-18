@@ -17,49 +17,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
-      # - name: Maximize build space
-      #   uses: easimon/maximize-build-space@master
-      #   with:
-      #     root-reserve-mb: 512
-      #     swap-size-mb: 1024
-      #     remove-dotnet: 'true'
-      #     remove-android: 'true'
-      #     remove-haskell: 'true'
-      #     remove-codeql: 'true'
-      #     remove-docker-images: 'true'
       - name: Remove unnecessary files
         run: |
           echo "1 Free space:"
           df -h
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          sudo rm -rf /opt/hostedtoolcache
           echo "2 Free space:"
           df -h
 
       # git checkout code
       - name: Checkout
         uses: actions/checkout@v3
-
-      # - name: Delete huge unnecessary tools folder
-      #   run: rm -rf /opt/hostedtoolcache
-
-      # - name: Free Up GitHub Actions Ubuntu Runner Disk Space 🔧
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-      #     tool-cache: true
-
-      #     # All of these default to true, but feel free to set to "false" if necessary for your workflow
-      #     android: false
-      #     dotnet: false
-      #     haskell: false
-      #     large-packages: false
-      #     swap-storage: false
-
-      # # Set up QEMU, as it is a dependency for docker buildx.
-      # - name: Set up QEMU for multi-architecture builds
-      #   uses: docker/setup-qemu-action@v3
 
       # Set up Docker buildx to facilitate the building of multi-platform images.
       - name: Setup Docker buildx for multi-architecture builds
