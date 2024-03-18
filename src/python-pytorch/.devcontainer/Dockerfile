@@ -58,7 +58,7 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh \
 	&& code-server --install-extension ms-python.vscode-pylance \
     && code-server --install-extension ms-toolsai.jupyter
 
-RUN pip3 install -y --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
