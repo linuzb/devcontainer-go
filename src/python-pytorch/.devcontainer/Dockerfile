@@ -7,7 +7,7 @@ FROM continuumio/miniconda3 as upstream
     # <package_name> = <version>
 
 # Reset and copy updated files with updated privs to keep image size down
-FROM mcr.microsoft.com/devcontainers/base:1-bullseye
+FROM mcr.microsoft.com/devcontainers/base:1-bookworm
 
 ARG USERNAME=vscode
 
@@ -50,8 +50,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && echo "conda activate base" >> ~/.bashrc \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/add-notice.sh
 
-
-
 # install code server
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
@@ -60,13 +58,15 @@ RUN code-server --install-extension ms-python.python \
 	&& code-server --install-extension ms-python.vscode-pylance \
     && code-server --install-extension ms-toolsai.jupyter
 
+RUN conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
-COPY environment.yml* noop.txt /tmp/conda-tmp/
-RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
-    && rm -rf /tmp/conda-tmp
+# COPY environment.yml* noop.txt /tmp/conda-tmp/
+# RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
+#     && rm -rf /tmp/conda-tmp
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
-COPY requirements.txt noop.txt /tmp/pip-tmp/
-RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-   && rm -rf /tmp/pip-tmp
+# COPY requirements.txt noop.txt /tmp/pip-tmp/
+# RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+#    && rm -rf /tmp/pip-tmp
