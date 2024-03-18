@@ -1,10 +1,10 @@
-FROM continuumio/miniconda3 as upstream
+# FROM continuumio/miniconda3 as upstream
 
-# Temporary: Upgrade python packages due to mentioned CVEs
-# They are installed by the base image (continuumio/miniconda3) which does not have the patch.
-# RUN conda install \ 
-    # https://github.com/advisories/<CVE_ID>
-    # <package_name> = <version>
+# # Temporary: Upgrade python packages due to mentioned CVEs
+# # They are installed by the base image (continuumio/miniconda3) which does not have the patch.
+# # RUN conda install \ 
+#     # https://github.com/advisories/<CVE_ID>
+#     # <package_name> = <version>
 
 # Reset and copy updated files with updated privs to keep image size down
 FROM mcr.microsoft.com/devcontainers/base:1-bookworm
@@ -16,7 +16,7 @@ RUN groupadd -r conda --gid 900 \
     && usermod -aG conda ${USERNAME}
 
 # Copy opt folder, set ownership and group permissions
-COPY --chown=:conda --chmod=775 --from=upstream /opt/conda /opt/conda
+# COPY --chown=:conda --chmod=775 --from=upstream /opt/conda /opt/conda
 RUN chmod =2775 /opt/conda
 
 USER root
@@ -24,10 +24,10 @@ USER root
 # Copy scripts to execute
 COPY add-notice.sh /tmp/library-scripts/
 
-# Setup conda to mirror contents from https://github.com/ContinuumIO/docker-images/blob/master/miniconda3/debian/Dockerfile
-ENV LANG=C.UTF-8 \
-    LC_ALL=C.UTF-8 \
-    PATH=/opt/conda/bin:$PATH
+# # Setup conda to mirror contents from https://github.com/ContinuumIO/docker-images/blob/master/miniconda3/debian/Dockerfile
+# ENV LANG=C.UTF-8 \
+#     LC_ALL=C.UTF-8 \
+#     PATH=/opt/conda/bin:$PATH
 ARG USERNAME=vscode
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get install -y --no-install-recommends \
@@ -42,23 +42,24 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         procps \
         subversion \
         wget \
+        python3 \
+        pytyon3-pip \
     && apt-get upgrade -y \
     && bash /tmp/library-scripts/add-notice.sh \
     # && mv -f "/tmp/library-scripts/meta.env" /usr/local/etc/vscode-dev-containers/meta.env \
-    && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
-    && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc \
-    && echo "conda activate base" >> ~/.bashrc \
+    # && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
+    # && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc \
+    # && echo "conda activate base" >> ~/.bashrc \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/add-notice.sh
 
-# install code server
-RUN curl -fsSL https://code-server.dev/install.sh | sh
-
-# code-server install extensions
-RUN code-server --install-extension ms-python.python \
+# install code server and install extensions
+RUN curl -fsSL https://code-server.dev/install.sh | sh \
+    && code-server --install-extension ms-python.python \
 	&& code-server --install-extension ms-python.vscode-pylance \
     && code-server --install-extension ms-toolsai.jupyter
 
-RUN conda install -y --quiet --freeze-installed pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+RUN pip3 install -y --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
 
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
