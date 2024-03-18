@@ -43,7 +43,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         subversion \
         wget \
         python3 \
-        pytyon3-pip \
+        python3-pip \
     && apt-get upgrade -y \
     && bash /tmp/library-scripts/add-notice.sh \
     # && mv -f "/tmp/library-scripts/meta.env" /usr/local/etc/vscode-dev-containers/meta.env \
