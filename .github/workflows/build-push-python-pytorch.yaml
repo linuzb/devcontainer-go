@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKERHUB_NAMESPACE: levizebulon
+  DOCKERHUB_REGISTORY: registry.cn-hangzhou.aliyuncs.com
+  DOCKERHUB_NAMESPACE: linuzb
   DOCKERHUB_REPO: devcontainer
   WORKLOAD_TYPE: python-pytorch
 
@@ -46,8 +47,11 @@ jobs:
           # GitHub Repo => Settings => Secrets add Docker Hub login key information
           # DOCKERHUB_USERNAME is the Docker Hub username.
           # DOCKERHUB_TOKEN: docker hub => Account Setting => Security => New Access Token.
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ${{ env.DOCKERHUB_REGISTORY }}
+          # username: ${{ secrets.DOCKERHUB_USERNAME }}
+          # password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_TOKEN }}
 
       - name: Install @devcontainers/cli
         run: npm install -g @devcontainers/cli
@@ -58,10 +62,10 @@ jobs:
           df -h
           devcontainer build \
             --workspace-folder ./src/${{ env.WORKLOAD_TYPE }} \
-            --image-name=${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:${{ env.WORKLOAD_TYPE }}-${{ env.APP_VERSION }} \
-            --image-name=${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:${{ env.WORKLOAD_TYPE }}-latest \
+            --image-name=${{ env.DOCKERHUB_REGISTORY }}/${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:${{ env.WORKLOAD_TYPE }}-${{ env.APP_VERSION }} \
+            --image-name=${{ env.DOCKERHUB_REGISTORY }}/${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}:${{ env.WORKLOAD_TYPE }}-latest \
             --log-level trace \
             --output type=docker
           docker images
       - name: Publish image
-        run: docker push --all-tags ${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}
+        run: docker push --all-tags ${{ env.DOCKERHUB_REGISTORY }}/${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPO }}
