@@ -1,0 +1,49 @@
+name: 'Transform image'
+on:
+  workflow_dispatch:
+
+env:
+  TARGET_REGISTORY: registry.cn-hangzhou.aliyuncs.com
+  TARGET_NAMESPACE: linuzb
+  SOURCE_REGISTORY: quay.io
+  SOURCE_NAMESPACE: jupyter
+  SOURCE_IMAGE: pytorch-notebook
+  SOURCE_TAG: cuda11-pytorch-2.2.1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove unnecessary files
+        run: |
+          echo "1 Free space:"
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          sudo rm -rf /opt/hostedtoolcache
+          echo "2 Free space:"
+          df -h
+
+      # git checkout code
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # 登录 docker hub
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKERHUB_REGISTORY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_TOKEN }}
+
+      - name: Install @devcontainers/cli
+        run: npm install -g @devcontainers/cli
+
+      - name: Build image
+        run: |
+          echo "Free space:"
+          df -h
+
+          docker pull ${{ env.SOURCE_REGISTORY }}/${{ env.SOURCE_NAMESPACE }}/${{ env.SOURCE_IMAGE }}/${{ env.SOURCE_TAG }}
+          docker tag ${{ env.SOURCE_REGISTORY }}/${{ env.SOURCE_NAMESPACE }}/${{ env.SOURCE_IMAGE }}/${{ env.SOURCE_TAG }} ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}
+          docker push ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}
