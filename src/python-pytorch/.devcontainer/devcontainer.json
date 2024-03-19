@@ -5,11 +5,11 @@
     },
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {
-            "installZsh": "true",
+            // "installZsh": "true",
             "username": "vscode",
             "userUid": "1000",
             "userGid": "1000",
-            "upgradePackages": "true"
+            // "upgradePackages": "true"
         }
     },
 	// Configure tool-specific properties.
