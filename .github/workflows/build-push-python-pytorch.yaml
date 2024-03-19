@@ -32,8 +32,8 @@ jobs:
         uses: actions/checkout@v3
 
       # Set up Docker buildx to facilitate the building of multi-platform images.
-      - name: Setup Docker buildx for multi-architecture builds
-        uses: docker/setup-buildx-action@v3
+      # - name: Setup Docker buildx for multi-architecture builds
+      #   uses: docker/setup-buildx-action@v3
 
       # Use the git command to retrieve the current tag information and store it in the environment variable APP_VERSION.
       - name: Generate App Version
