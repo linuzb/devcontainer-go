@@ -1,5 +1,10 @@
 name: 'Transform image'
 on:
+  push:
+    branches:
+    - main
+    paths:
+    - 'src/jupyter-pytorch/**'
   workflow_dispatch:
 
 env:
@@ -28,6 +33,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      # Use the git command to retrieve the current tag information and store it in the environment variable APP_VERSION.
+      - name: Generate App Version
+        run: echo APP_VERSION=`git describe --tags --always` >> $GITHUB_ENV
+
       # 登录 docker hub
       - name: Login to DockerHub
         uses: docker/login-action@v3
@@ -36,8 +45,14 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_TOKEN }}
 
-      - name: Build image
-        run: |
-          docker pull ${{ env.SOURCE_REGISTORY }}/${{ env.SOURCE_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}
-          docker tag ${{ env.SOURCE_REGISTORY }}/${{ env.SOURCE_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }} ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}
-          docker push ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}
+      - name: Build and push
+        id: docker_build_
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          file: src/jupyter-pytorch/Dockerfile
+          # docker build arg
+          build-args: |
+            BASE_IMATE=${{ env.SOURCE_REGISTORY }}/${{ env.SOURCE_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}
+          tags: |
+            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}-${{ env.APP_VERSION }}
