@@ -65,7 +65,7 @@ jobs:
           push: true
           file: src/jupyter-pytorch/Dockerfile
           # docker build arg
-          # build-args: |
-          #   BASE_IMATE=${{ env.SOURCE_REGISTORY }}/${{ env.SOURCE_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}
+          build-args: |
+            BASE_IMATE=jupyter/scipy-notebook:python-3.9
           tags: |
             ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}-${{ env.APP_VERSION }}
