@@ -19,6 +19,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+
+      # Image with CUDA needs extra disk space
+      - name: Free disk space 🧹
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
       - name: Remove unnecessary files
         run: |
           echo "1 Free space:"
@@ -52,7 +65,7 @@ jobs:
           push: true
           file: src/jupyter-pytorch/Dockerfile
           # docker build arg
-          build-args: |
-            BASE_IMATE=${{ env.SOURCE_REGISTORY }}/${{ env.SOURCE_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}
+          # build-args: |
+          #   BASE_IMATE=${{ env.SOURCE_REGISTORY }}/${{ env.SOURCE_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}
           tags: |
             ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.SOURCE_TAG }}-${{ env.APP_VERSION }}
