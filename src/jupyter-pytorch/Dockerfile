@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir --index-url 'https://download.pytorch.org/whl/cu1
     'torchvision==0.13.0+cu116 ' \
     'torchaudio==0.12.0'  && \
     pip install --no-cache-dir \
-    d2l==0.17.6 &&\
+    d2l==0.17.6 && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
