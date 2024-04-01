@@ -1,3 +1,4 @@
 # 新增镜像时，将前面已经同步的镜像通过 # 注释，避免重复同步
-registry.k8s.io/kube-scheduler:v1.28.8
+# registry.k8s.io/kube-scheduler:v1.28.8
 registry.k8s.io/pause:3.9
+# 结束转换
