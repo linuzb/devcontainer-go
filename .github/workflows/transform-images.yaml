@@ -52,7 +52,7 @@ jobs:
           password: ${{ secrets.ACR_TOKEN }}
 
       - name: Build and push
+        working-directory: ./src/transform-images 
         run: |
-          cd src/transform-images
           chmod +x convert_images.sh
           .convert_images.sh {{ env.TARGET_REGISTORY }}/{{ env.TARGET_NAMESPACE }}
