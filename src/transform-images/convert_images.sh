@@ -17,7 +17,7 @@ if [ "$#" -eq 2 ] && [ "$2" == "dryrun" ]; then
 fi
 
 # 读取 image.txt 文件并进行处理
-while IFS= read -r line; do
+while IFS= read -r line || [[ -n "$line" ]]; do
     # 忽略注释行和空行
     if [[ $line == \#* ]] || [[ -z $line ]]; then
         continue
