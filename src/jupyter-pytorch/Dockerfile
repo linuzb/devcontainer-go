@@ -25,8 +25,6 @@ RUN apt-get update --yes \
     git \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-USER ${NB_UID}
-
 # Installation de Code Server et server-proxy/vscode-proxy pour intégrer Code dans JupyterLab
 # Install VSCode extensions
 ENV CODE_VERSION=4.22.1
@@ -35,6 +33,8 @@ RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERS
     rm -f code-server_${CODE_VERSION}_amd64.deb && \
     EXT_LIST="ms-python.python ms-python.debugpy" && \
     for EXT in $EXT_LIST; do code-server --install-extension $EXT; done
+
+USER ${NB_UID}
 
 # Install PyTorch with pip (https://pytorch.org/get-started/locally/)
 # hadolint ignore=DL3013
