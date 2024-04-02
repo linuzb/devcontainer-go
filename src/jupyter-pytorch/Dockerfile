@@ -24,9 +24,8 @@ RUN apt-get update --yes \
     vim \
     git \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
-    && curl -fsSL https://code-server.dev/install.sh | sh
-
-USER ${NB_UID}
+    && curl -fsSL https://code-server.dev/install.sh | sh \
+    && rm -rf $HOME/.cache/code-server
 
 # Install VSCode extensions
 RUN EXT_LIST="ms-python.python ms-python.debugpy" && \
@@ -44,7 +43,7 @@ RUN pip install --no-cache-dir --index-url 'https://download.pytorch.org/whl/cu1
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-
+USER ${NB_UID}
 
 # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/docker-specialized.html#dockerfiles
 ENV NVIDIA_VISIBLE_DEVICES all
