@@ -34,8 +34,6 @@ RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERS
     EXT_LIST="ms-python.python ms-python.debugpy" && \
     for EXT in $EXT_LIST; do code-server --install-extension $EXT; done
 
-USER ${NB_UID}
-
 # Install PyTorch with pip (https://pytorch.org/get-started/locally/)
 # hadolint ignore=DL3013
 RUN pip install --no-cache-dir --index-url 'https://download.pytorch.org/whl/cu116' \
@@ -48,6 +46,8 @@ RUN pip install --no-cache-dir --index-url 'https://download.pytorch.org/whl/cu1
     jupyter-vscode-proxy && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
+
+USER ${NB_UID}
 
 # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/docker-specialized.html#dockerfiles
 ENV NVIDIA_VISIBLE_DEVICES all
