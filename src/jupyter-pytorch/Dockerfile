@@ -39,6 +39,7 @@ RUN pip install --no-cache-dir --index-url 'https://download.pytorch.org/whl/cu1
     'torchaudio==0.12.0+cu116'  && \
     pip install --no-cache-dir \
     d2l==0.17.6 \
+    jupyter-server-proxy \
     jupyter-vscode-proxy && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
