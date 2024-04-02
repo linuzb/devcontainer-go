@@ -23,9 +23,14 @@ RUN apt-get update --yes \
     pandoc \
     vim \
     git \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && curl -fsSL https://code-server.dev/install.sh | sh
 
 USER ${NB_UID}
+
+# Install VSCode extensions
+RUN EXT_LIST="ms-python.python ms-python.debugpy" && \
+    for EXT in $EXT_LIST; do code-server --install-extension $EXT; done
 
 # Install PyTorch with pip (https://pytorch.org/get-started/locally/)
 # hadolint ignore=DL3013
@@ -34,16 +39,11 @@ RUN pip install --no-cache-dir --index-url 'https://download.pytorch.org/whl/cu1
     'torchvision==0.13.0+cu116 ' \
     'torchaudio==0.12.0+cu116'  && \
     pip install --no-cache-dir \
-    d2l==0.17.6 && \
+    d2l==0.17.6 \
+    jupyter-vscode-proxy && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-RUN pip install --no-cache-dir jupyter-vscode-proxy && \
-    curl -fsSL https://code-server.dev/install.sh | sh
-
-# Install VSCode extensions
-RUN code-server --install-extension ms-python.python && \
-    ms-python.debugpy
 
 
 # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/docker-specialized.html#dockerfiles
