@@ -22,6 +22,14 @@ RUN pip install --no-cache-dir --index-url 'https://download.pytorch.org/whl/cu1
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
+RUN pip install --no-cache-dir jupyter-vscode-proxy && \
+    curl -fsSL https://code-server.dev/install.sh | sh
+
+# Install VSCode extensions
+RUN code-server --install-extension ms-python.python && \
+    ms-python.debugpy
+
+
 # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/docker-specialized.html#dockerfiles
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
