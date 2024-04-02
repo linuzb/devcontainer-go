@@ -23,12 +23,17 @@ RUN apt-get update --yes \
     pandoc \
     vim \
     git \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* \
-    && curl -fsSL https://code-server.dev/install.sh | sh \
-    && rm -rf $HOME/.cache/code-server
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+USER ${NB_UID}
+
+# Installation de Code Server et server-proxy/vscode-proxy pour intégrer Code dans JupyterLab
 # Install VSCode extensions
-RUN EXT_LIST="ms-python.python ms-python.debugpy" && \
+ENV CODE_VERSION=4.22.1
+RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb && \
+    dpkg -i code-server_${CODE_VERSION}_amd64.deb && \
+    rm -f code-server_${CODE_VERSION}_amd64.deb && \
+    EXT_LIST="ms-python.python ms-python.debugpy" && \
     for EXT in $EXT_LIST; do code-server --install-extension $EXT; done
 
 # Install PyTorch with pip (https://pytorch.org/get-started/locally/)
@@ -43,8 +48,6 @@ RUN pip install --no-cache-dir --index-url 'https://download.pytorch.org/whl/cu1
     jupyter-vscode-proxy && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
-
-USER ${NB_UID}
 
 # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/docker-specialized.html#dockerfiles
 ENV NVIDIA_VISIBLE_DEVICES all
