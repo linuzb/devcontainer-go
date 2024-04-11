@@ -23,6 +23,7 @@ RUN apt-get update --yes \
     pandoc \
     vim \
     git \
+    libopenmpi-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installation de Code Server et server-proxy/vscode-proxy pour intégrer Code dans JupyterLab
