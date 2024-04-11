@@ -32,7 +32,7 @@ ENV CODE_VERSION=4.22.1
 RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb && \
     dpkg -i code-server_${CODE_VERSION}_amd64.deb && \
     rm -f code-server_${CODE_VERSION}_amd64.deb && \
-    EXT_LIST="ms-python.python ms-python.debugpy zhuangtongfa.material-theme" && \
+    EXT_LIST="ms-python.python zhuangtongfa.material-theme" && \
     for EXT in $EXT_LIST; do code-server --install-extension $EXT; done
 
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
