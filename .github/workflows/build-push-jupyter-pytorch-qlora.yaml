@@ -11,7 +11,7 @@ on:
 env:
   TARGET_REGISTORY: registry.cn-hangzhou.aliyuncs.com
   TARGET_NAMESPACE: linuzb
-  WORKLOAD_TYPE: python-pytorch-qlora
+  WORKLOAD_TYPE: jupyter-pytorch-qlora
   # Dockerfile: https://github.com/jupyter/docker-stacks/blob/main/images/pytorch-notebook/cuda11/Dockerfile
   # image: https://quay.io/repository/jupyter/pytorch-notebook?tab=tags
   BASE_REGISTORY: quay.io
