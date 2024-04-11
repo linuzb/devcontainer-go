@@ -45,6 +45,7 @@ COPY requirements.txt noop.txt /tmp/pip-tmp/
 RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
    && rm -rf /tmp/pip-tmp \
    && fix-permissions "${CONDA_DIR}" \
-   && fix-permissions "/home/${NB_USER}"
+   && fix-permissions "/home/${NB_USER}" \
+   fi
 
 USER ${NB_UID}
