@@ -67,7 +67,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          file: src/${{ env.WORKLOAD_TYPE }}/Dockerfile
+          context: src/${{ env.WORKLOAD_TYPE }}
+          # file: src/${{ env.WORKLOAD_TYPE }}/Dockerfile
           # docker build arg
           build-args: |
             BASE_CONTAINER=${{ env.BASE_REGISTORY }}/${{ env.BASE_NAMESPACE }}/${{ env.BASE_IMAGE }}:${{ env.BASE_TAG }}
