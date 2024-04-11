@@ -42,10 +42,10 @@ RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERS
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 COPY requirements.txt noop.txt /tmp/pip-tmp/
-RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt; fi \
    && rm -rf /tmp/pip-tmp \
    && fix-permissions "${CONDA_DIR}" \
-   && fix-permissions "/home/${NB_USER}" \
-   fi
+   && fix-permissions "/home/${NB_USER}"
+   
 
 USER ${NB_UID}
