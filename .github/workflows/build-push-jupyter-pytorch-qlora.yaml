@@ -72,4 +72,4 @@ jobs:
           build-args: |
             BASE_CONTAINER=${{ env.BASE_REGISTORY }}/${{ env.BASE_NAMESPACE }}/${{ env.BASE_IMAGE }}:${{ env.BASE_TAG }}
           tags: |
-            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.SOURCE_IMAGE }}:${{ env.BASE_TAG }}-${{ env.APP_VERSION }}
+            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.BASE_IMAGE }}:${{ env.BASE_TAG }}-${{ env.APP_VERSION }}
