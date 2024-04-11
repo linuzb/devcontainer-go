@@ -1,4 +1,4 @@
-name: 'Transform image'
+name: 'Build jupyter pytorch qlora'
 on:
   push:
     branches:

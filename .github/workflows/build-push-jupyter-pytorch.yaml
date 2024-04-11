@@ -1,4 +1,4 @@
-name: 'Transform image'
+name: 'build jupyter pytorch'
 on:
   push:
     branches:
