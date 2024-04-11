@@ -36,9 +36,9 @@ RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERS
 
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
-# COPY environment.yml* noop.txt /tmp/conda-tmp/
-# RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
-#     && rm -rf /tmp/conda-tmp
+COPY environment.yml* noop.txt /tmp/conda-tmp/
+RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
+    && rm -rf /tmp/conda-tmp
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 COPY requirements.txt noop.txt /tmp/pip-tmp/
@@ -46,6 +46,5 @@ RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-c
    && rm -rf /tmp/pip-tmp \
    && fix-permissions "${CONDA_DIR}" \
    && fix-permissions "/home/${NB_USER}"
-   
 
 USER ${NB_UID}
