@@ -23,6 +23,8 @@ RUN apt-get update --yes \
     pandoc \
     vim \
     git \
+    zip \
+    unzip \
     libopenmpi-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
