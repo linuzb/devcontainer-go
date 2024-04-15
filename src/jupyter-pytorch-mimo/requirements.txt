@@ -1,0 +1,5 @@
+numpy==1.26.4
+Pillow==10.3.0
+tensorborad
+skimage
+tqdm==4.66.2
