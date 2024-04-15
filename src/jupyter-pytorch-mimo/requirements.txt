@@ -1,6 +1,6 @@
 pipreqs
-numpy>=1.26.4
-Pillow>=10.3.0
+numpy
+Pillow
 tensorborad
 skimage
-tqdm>=4.66.2
+tqdm
