@@ -2,5 +2,5 @@ pipreqs
 numpy
 Pillow
 tensorboard
-skimage
+scikit-image
 tqdm
