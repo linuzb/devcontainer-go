@@ -28,7 +28,7 @@ RUN apt-get update --yes \
     libopenmpi-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Uses "ys" theme (original Oh My Zsh theme), with no plugins
+# Uses "robbyrussell" theme (original Oh My Zsh theme), with no plugins
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
     -t ys
 
