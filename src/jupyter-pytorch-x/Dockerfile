@@ -30,7 +30,7 @@ RUN apt-get update --yes \
 
 # Uses "robbyrussell" theme (original Oh My Zsh theme), with no plugins
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
-    -t ys
+    -t robbyrussell
 
 # Installation de Code Server et server-proxy/vscode-proxy pour intégrer Code dans JupyterLab
 # Install VSCode extensions
