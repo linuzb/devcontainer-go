@@ -1,6 +1,6 @@
 pipreqs
 numpy
 Pillow
-tensorborad
+tensorboard
 skimage
 tqdm
