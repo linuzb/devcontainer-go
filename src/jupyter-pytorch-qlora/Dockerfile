@@ -44,6 +44,13 @@ RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERS
 # RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
 #     && rm -rf /tmp/conda-tmp
 
+RUN pip install --no-cache-dir \
+    'torch==2.0.1' \
+    'torchvision==0.15.2' \
+    'torchaudio==2.0.2'  && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
 # mamba/conda instsall
 RUN mamba install --yes \
     'jupyter-server-proxy' \
