@@ -53,6 +53,7 @@ RUN pip install --no-cache-dir \
 
 # mamba/conda instsall
 RUN mamba install --yes \
+    cudatoolkit \
     'jupyter-server-proxy' \
     'jupyter-vscode-proxy' && \
     mamba clean --all -f -y && \
