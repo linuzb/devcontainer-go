@@ -17,14 +17,14 @@ RUN apt-get update --yes \
     && apt-get install --yes --no-install-recommends \
     # build-essential \
     wget \
-    # curl \
+    curl \
     # - pandoc is used to convert notebooks to html files
     #   it's not present in the aarch64 Ubuntu image, so we install it here
     pandoc \
     vim \
-    # git \
+    git \
     zip \
-    # unzip \
+    unzip \
     libopenmpi-dev \
     zsh \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
