@@ -13,11 +13,11 @@ env:
   TARGET_NAMESPACE: linuzb
   WORKLOAD_TYPE: jupyter-pytorch-x
   # Dockerfile: https://github.com/jupyter/docker-stacks/blob/main/images/pytorch-notebook/cuda11/Dockerfile
-  # image: https://quay.io/repository/jupyter/pytorch-notebook?tab=tags
-  BASE_REGISTORY: quay.io
+  # image: https://hub.docker.com/r/jupyter/scipy-notebook/tags?page=&page_size=&ordering=&name=
+  BASE_REGISTORY: docker.io
   BASE_NAMESPACE: jupyter
   BASE_IMAGE: scipy-notebook
-  BASE_TAG: python-3.11
+  BASE_TAG: python-3.9
 
 jobs:
   build:
