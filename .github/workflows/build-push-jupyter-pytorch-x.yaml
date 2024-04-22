@@ -17,7 +17,7 @@ env:
   BASE_REGISTORY: docker.io
   BASE_NAMESPACE: jupyter
   BASE_IMAGE: scipy-notebook
-  BASE_TAG: python-3.9
+  BASE_TAG: python-3.10
 
 jobs:
   build:
