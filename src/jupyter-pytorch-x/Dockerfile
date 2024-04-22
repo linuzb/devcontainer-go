@@ -63,13 +63,15 @@ RUN mkdir -p /opt/pycharm \
     && chown ${NB_USER} /opt/pycharm/bin/idea.properties \
     # Create a symbolic link in PATH that points to the Intellij startup script.
     && ln -s /opt/pycharm/bin/pycharm.sh /usr/bin/pycharm \
-    && pip --disable-pip-version-check --no-cache-dir install jupyter-projector-proxy
+    && pip --disable-pip-version-check --no-cache-dir install \
+    jupyter-projector-proxy \
+    projector-installer
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
-COPY requirements.txt noop.txt /tmp/pip-tmp/
-RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt; fi \
-   && rm -rf /tmp/pip-tmp \
-   && fix-permissions "${CONDA_DIR}" \
-   && fix-permissions "/home/${NB_USER}"
+# COPY requirements.txt noop.txt /tmp/pip-tmp/
+# RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt; fi \
+#    && rm -rf /tmp/pip-tmp \
+#    && fix-permissions "${CONDA_DIR}" \
+#    && fix-permissions "/home/${NB_USER}"
 
 USER ${NB_UID}
