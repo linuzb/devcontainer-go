@@ -26,6 +26,12 @@ RUN apt-get update --yes \
     zip \
     # unzip \
     libopenmpi-dev \
+    less \
+    libxext6 \
+    libxrender1 \
+    libxtst6 \
+    libfreetype6 \
+    libxi6 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installation de Code Server et server-proxy/vscode-proxy pour intégrer Code dans JupyterLab
@@ -55,17 +61,20 @@ RUN mamba install --yes \
 # As root or superuser
 # Install Pycharm Community
 ENV JB_VERSION=2024.1
-RUN mkdir -p /opt/pycharm \
+RUN pip --disable-pip-version-check --no-cache-dir install \
+    jupyter-projector-proxy \
+    projector-installer \
+    cryptography \
+    netifaces \
+    && mkdir -p /opt/pycharm \
     && curl -L "https://download.jetbrains.com/product?code=PCC&${JB_VERSION}&distribution=linux" \
     | tar -C /opt/pycharm --strip-components 1 -xzvf - \
     # Make The idea.properties editable
     # If the user you use to start jupyter/jupyterlab/jupyter hub is named tiaden
     && chown ${NB_USER} /opt/pycharm/bin/idea.properties \
     # Create a symbolic link in PATH that points to the Intellij startup script.
-    && ln -s /opt/pycharm/bin/pycharm.sh /usr/bin/pycharm \
-    && pip --disable-pip-version-check --no-cache-dir install \
-    jupyter-projector-proxy \
-    projector-installer
+    && ln -s /opt/pycharm/bin/pycharm.sh /usr/bin/pycharm
+
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 # COPY requirements.txt noop.txt /tmp/pip-tmp/
