@@ -32,6 +32,7 @@ RUN apt-get update --yes \
     libxtst6 \
     libfreetype6 \
     libxi6 \
+    octave \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installation de Code Server et server-proxy/vscode-proxy pour intégrer Code dans JupyterLab
