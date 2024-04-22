@@ -75,6 +75,7 @@ RUN pip --disable-pip-version-check --no-cache-dir install \
     # Create a symbolic link in PATH that points to the Intellij startup script.
     && ln -s /opt/pycharm/bin/pycharm.sh /usr/bin/pycharm
 
+# https://github.com/Calysto/octave_kernel
 RUN pip --disable-pip-version-check --no-cache-dir install octave_kernel
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
