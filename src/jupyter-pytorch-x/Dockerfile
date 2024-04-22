@@ -32,6 +32,7 @@ RUN apt-get update --yes \
     libxtst6 \
     libfreetype6 \
     libxi6 \
+    gnuplot \
     octave \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
