@@ -26,6 +26,7 @@ RUN apt-get update --yes \
     zip \
     # unzip \
     libopenmpi-dev \
+    zsh \
     tmux \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
