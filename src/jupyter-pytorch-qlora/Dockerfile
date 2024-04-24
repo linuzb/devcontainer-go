@@ -27,6 +27,7 @@ RUN apt-get update --yes \
     # unzip \
     libopenmpi-dev \
     zsh \
+    tmux \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installation de Code Server et server-proxy/vscode-proxy pour intégrer Code dans JupyterLab
