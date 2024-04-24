@@ -26,11 +26,8 @@ RUN apt-get update --yes \
     zip \
     # unzip \
     libopenmpi-dev \
+    tmux \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Uses "robbyrussell" theme (original Oh My Zsh theme), with no plugins
-RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
-    -t robbyrussell
 
 # Installation de Code Server et server-proxy/vscode-proxy pour intégrer Code dans JupyterLab
 # Install VSCode extensions
