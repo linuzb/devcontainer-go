@@ -27,7 +27,7 @@ RUN apt-get update --yes \
     tmux \
     screen \
     python3.9 \
-    pyton3-pip \
+    python3-pip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
