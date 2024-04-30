@@ -30,9 +30,18 @@ RUN apt-get update --yes \
     python3-pip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN which python \
+    && which python3 \
+    && which pip \
+    && which pip3 \
+    && pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cu116 \
+    torch==1.13.1+cu116 \
+    torchvision==0.14.1+cu116 \
+    torchaudio==0.13.1
+    
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
-COPY requirements.txt noop.txt /tmp/pip-tmp/
-RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt; fi \
-   && rm -rf /tmp/pip-tmp
+# COPY requirements.txt noop.txt /tmp/pip-tmp/
+# RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt; fi \
+#    && rm -rf /tmp/pip-tmp
 
 # USER ${NB_UID}
