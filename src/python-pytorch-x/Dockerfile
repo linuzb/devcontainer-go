@@ -33,8 +33,6 @@ RUN apt-get update --yes \
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 COPY requirements.txt noop.txt /tmp/pip-tmp/
 RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt; fi \
-   && rm -rf /tmp/pip-tmp \
-   && fix-permissions "${CONDA_DIR}" \
-   && fix-permissions "/home/${NB_USER}"
+   && rm -rf /tmp/pip-tmp
 
 # USER ${NB_UID}
