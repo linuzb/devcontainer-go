@@ -1,4 +1,4 @@
-name: 'Build jupyter pytorch x'
+name: 'Build python pytorch x'
 on:
   push:
     branches:
