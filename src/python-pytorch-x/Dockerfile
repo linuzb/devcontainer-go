@@ -42,6 +42,13 @@ RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERS
 # RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
 #     && rm -rf /tmp/conda-tmp
 
+# Configure environment
+ENV CONDA_DIR=/opt/conda \
+    SHELL=/bin/bash \
+    LC_ALL=C.UTF-8 \
+    LANG=C.UTF-8 \
+    LANGUAGE=C.UTF-8
+ENV PATH="${CONDA_DIR}/bin:${PATH}"
 
 # Pin the Python version here, or set it to "default"
 ARG PYTHON_VERSION=3.11
