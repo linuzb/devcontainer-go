@@ -30,11 +30,8 @@ RUN apt-get update --yes \
     python3-pip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN which python \
-    && which python3 \
-    && which pip \
-    && which pip3 \
-    && pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cu116 \
+RUN which pip3 \
+    && pip3 install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cu116 \
     torch==1.13.1+cu116 \
     torchvision==0.14.1+cu116 \
     torchaudio==0.13.1
