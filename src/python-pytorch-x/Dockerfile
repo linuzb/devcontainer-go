@@ -25,7 +25,8 @@ RUN apt-get update --yes \
     unzip \
     tmux \
     screen \
-    python3.11 \
+    python3.9 \
+    python3-pip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installation de Code Server et server-proxy/vscode-proxy pour intégrer Code dans JupyterLab
