@@ -57,15 +57,15 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_TOKEN }}
 
-      - name: Build and push
-        id: docker_build_
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: src/${{ env.WORKLOAD_TYPE }}
-          # file: src/${{ env.WORKLOAD_TYPE }}/Dockerfile
-          tags: |
-            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }}
+      # - name: Build and push
+      #   id: docker_build_
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     push: true
+      #     context: src/${{ env.WORKLOAD_TYPE }}
+      #     # file: src/${{ env.WORKLOAD_TYPE }}/Dockerfile
+      #     tags: |
+      #       ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }}
 
       - name: test
-        run: docker run ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }}
+        run: docker run ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }} /bin/sh ls /workspace
