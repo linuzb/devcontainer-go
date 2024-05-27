@@ -2,6 +2,7 @@ from transformers import AutoTokenizer, AutoModel
 
 # tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True)
 tokenizer = AutoTokenizer.from_pretrained("/workspace/chatglm3-6b", trust_remote_code=True)
+
 # model = AutoModel.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True).half().cuda()
 model = AutoModel.from_pretrained("/workspace/chatglm3-6b", trust_remote_code=True).half().cuda()
 model = model.eval()
