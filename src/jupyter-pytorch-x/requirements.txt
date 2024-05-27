@@ -15,3 +15,4 @@ accelerate
 cpm_kernels
 sentencepiece==0.1.99
 bitsandbytes
+pdm
