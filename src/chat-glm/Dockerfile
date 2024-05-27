@@ -14,7 +14,7 @@ RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-c
    && rm -rf /tmp/pip-tmp
 
 # download model
-RUN huggingface-cli download --resume-download THUDM/chatglm3-6b --local-dir /workspace/chatglm3-6b
+RUN huggingface-cli download --resume-download THUDM/chatglm3-6b
 
 COPY run.py /workspace
 
