@@ -9,8 +9,8 @@ on:
   workflow_dispatch:
 
 env:
-  TARGET_REGISTORY: registry.cn-hangzhou.aliyuncs.com
-  TARGET_NAMESPACE: linuzb
+  TARGET_REGISTORY: docker.io
+  TARGET_NAMESPACE: levizebulon
   TARGET_IMAGE: chat-glm
   WORKLOAD_TYPE: chat-glm
 
@@ -54,18 +54,18 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ${{ env.TARGET_REGISTORY }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Build and push
-      #   id: docker_build_
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     push: true
-      #     context: src/${{ env.WORKLOAD_TYPE }}
-      #     # file: src/${{ env.WORKLOAD_TYPE }}/Dockerfile
-      #     tags: |
-      #       ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }}
+      - name: Build and push
+        id: docker_build_
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: src/${{ env.WORKLOAD_TYPE }}
+          # file: src/${{ env.WORKLOAD_TYPE }}/Dockerfile
+          tags: |
+            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }}
 
       - name: test
         run: docker run ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:221b4ac /bin/sh ls /workspace
