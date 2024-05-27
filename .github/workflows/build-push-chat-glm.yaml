@@ -67,8 +67,5 @@ jobs:
           tags: |
             ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }}
 
-      - name: list workspace
-        run: docker run ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }} /bin/sh ls /workspace
-
       - name: test
         run: docker run ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }} 
