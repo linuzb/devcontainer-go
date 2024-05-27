@@ -1,4 +1,4 @@
-name: 'Build jupyter pytorch mimo'
+name: 'Build chat-glm'
 on:
   push:
     branches:
