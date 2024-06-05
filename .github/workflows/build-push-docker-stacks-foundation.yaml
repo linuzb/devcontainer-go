@@ -1,0 +1,77 @@
+name: 'Build jupyter foundation'
+on:
+  push:
+    branches:
+    - main
+    - 'feat/**'
+    paths:
+    - 'src/docker-stacks-foundation/**'
+  workflow_dispatch:
+
+env:
+  TARGET_REGISTORY: registry.cn-hangzhou.aliyuncs.com
+  TARGET_NAMESPACE: linuzb
+  TARGET_IMAGE: docker-stacks-foundation
+  WORKLOAD_TYPE: docker-stacks-foundation
+  BASE_REGISTORY: docker.io
+  BASE_NAMESPACE: nvidia
+  BASE_IMAGE: cuda
+  BASE_TAG: 11.7.1-devel-ubuntu20.04
+  PYTHON_VERSION: 3.11
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      # Image with CUDA needs extra disk space
+      - name: Free disk space 🧹
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
+      - name: Remove unnecessary files
+        run: |
+          echo "1 Free space:"
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          sudo rm -rf /opt/hostedtoolcache
+          echo "2 Free space:"
+          df -h
+
+      # git checkout code
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Use the git command to retrieve the current tag information and store it in the environment variable APP_VERSION.
+      - name: Generate App Version
+        run: echo APP_VERSION=`git describe --tags --always` >> $GITHUB_ENV
+
+      # 登录 docker hub
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.TARGET_REGISTORY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_TOKEN }}
+
+      - name: Build and push
+        id: docker_build_
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: src/${{ env.WORKLOAD_TYPE }}
+          # file: src/${{ env.WORKLOAD_TYPE }}/Dockerfile
+          # docker build arg
+          build-args: |
+            BASE_CONTAINER=${{ env.BASE_REGISTORY }}/${{ env.BASE_NAMESPACE }}/${{ env.BASE_IMAGE }}:${{ env.BASE_TAG }}
+            PYTHON_VERSION=${{ env.PYTHON_VERSION }}
+          tags: |
+            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.BASE_TAG }}-python${{ env.PYTHON_VERSION }}-${{ env.APP_VERSION }}
