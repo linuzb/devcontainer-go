@@ -9,21 +9,27 @@ on:
   workflow_dispatch:
 
 env:
-  TARGET_REGISTORY: registry.cn-hangzhou.aliyuncs.com
-  TARGET_NAMESPACE: linuzb
+  TARGET_ACR_REGISTORY: registry.cn-hangzhou.aliyuncs.com
+  TARGET_ACR_NAMESPACE: linuzb
+
+  TARGET_DOCKERHUB_REGISTORY: docker.io
+  TARGET_DOCKERHUB_NAMESPACE: levizebulon
+  
   TARGET_IMAGE: docker-stacks-foundation
+
   WORKLOAD_TYPE: docker-stacks-foundation
+
   BASE_REGISTORY: docker.io
   BASE_NAMESPACE: nvidia
   BASE_IMAGE: cuda
   BASE_TAG: 11.7.1-devel-ubuntu20.04
+
   PYTHON_VERSION: 3.11
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
       # Image with CUDA needs extra disk space
       - name: Free disk space 🧹
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
@@ -54,13 +60,21 @@ jobs:
       - name: Generate App Version
         run: echo APP_VERSION=`git describe --tags --always` >> $GITHUB_ENV
 
-      # 登录 docker hub
+      # 登录 alibaba acr
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.TARGET_REGISTORY }}
+          registry: ${{ env.TARGET_ACR_REGISTORY }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_TOKEN }}
+
+      # 登录 dockerhub
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.TARGET_DOCKERHUB_REGISTORY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push
         id: docker_build_
@@ -74,4 +88,8 @@ jobs:
             BASE_CONTAINER=${{ env.BASE_REGISTORY }}/${{ env.BASE_NAMESPACE }}/${{ env.BASE_IMAGE }}:${{ env.BASE_TAG }}
             PYTHON_VERSION=${{ env.PYTHON_VERSION }}
           tags: |
-            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.BASE_TAG }}-python${{ env.PYTHON_VERSION }}-${{ env.APP_VERSION }}
+            # dockerhub
+            ${{ env.TARGET_DOCKERHUB_REGISTORY }}/${{ env.TARGET_DOCKERHUB_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.BASE_TAG }}-python${{ env.PYTHON_VERSION }}-${{ env.APP_VERSION }}
+            # alibaba acr
+            ${{ env.TARGET_ACR_REGISTORY }}/${{ env.TARGET_ACR_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.BASE_TAG }}-python${{ env.PYTHON_VERSION }}-${{ env.APP_VERSION }}
+
