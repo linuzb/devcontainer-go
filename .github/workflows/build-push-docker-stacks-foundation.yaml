@@ -88,8 +88,6 @@ jobs:
             BASE_CONTAINER=${{ env.BASE_REGISTORY }}/${{ env.BASE_NAMESPACE }}/${{ env.BASE_IMAGE }}:${{ env.BASE_TAG }}
             PYTHON_VERSION=${{ env.PYTHON_VERSION }}
           tags: |
-            # dockerhub
             ${{ env.TARGET_DOCKERHUB_REGISTORY }}/${{ env.TARGET_DOCKERHUB_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.BASE_TAG }}-python${{ env.PYTHON_VERSION }}-${{ env.APP_VERSION }}
-            # alibaba acr
             ${{ env.TARGET_ACR_REGISTORY }}/${{ env.TARGET_ACR_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.BASE_TAG }}-python${{ env.PYTHON_VERSION }}-${{ env.APP_VERSION }}
 
