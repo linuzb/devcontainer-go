@@ -17,6 +17,7 @@ env:
   BASE_NAMESPACE: nvidia
   BASE_IMAGE: cuda
   BASE_TAG: 11.7.1-devel-ubuntu20.04
+  PYTHON_VERSION: 3.11
 
 jobs:
   build:
@@ -71,5 +72,6 @@ jobs:
           # docker build arg
           build-args: |
             BASE_CONTAINER=${{ env.BASE_REGISTORY }}/${{ env.BASE_NAMESPACE }}/${{ env.BASE_IMAGE }}:${{ env.BASE_TAG }}
+            PYTHON_VERSION=${{ env.PYTHON_VERSION }}
           tags: |
-            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.BASE_TAG }}-${{ env.APP_VERSION }}
+            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.BASE_TAG }}-python${{ env.PYTHON_VERSION }}-${{ env.APP_VERSION }}
