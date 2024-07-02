@@ -70,4 +70,18 @@ RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-c
    && fix-permissions "${CONDA_DIR}" \
    && fix-permissions "/home/${NB_USER}"
 
+# 安装字体管理工具和解压工具
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends fontconfig unzip && \
+    rm -rf /var/lib/apt/lists/*
+
+# 下载并解压 Hack 字体
+RUN mkdir -p /usr/share/fonts/hack && \
+    curl -L https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip -o /tmp/hack-fonts.zip && \
+    unzip /tmp/hack-fonts.zip -d /usr/share/fonts/hack && \
+    rm /tmp/hack-fonts.zip
+
+# 更新字体缓存
+RUN fc-cache -f -v
+
 USER ${NB_UID}
