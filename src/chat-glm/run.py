@@ -27,10 +27,10 @@ def text_to_speech(response_text):
     synthesiser = pipeline("text-to-speech", "suno/bark-small")
     speech = synthesiser(response_text, forward_params={"do_sample": True})
 
-    return speech["audio"], speech["sampling_rate"]
+    return speech
 
 # 4. 保存语音到指定目录
-def save_audio(audio, sampling_rate, save_path):
+def save_audio(audio, save_path):
     # 保存生成的音频文件
     scipy.io.wavfile.write(save_path, rate=audio["sampling_rate"], data=audio["audio"])
     print(f"Saved generated audio to {save_path}")
@@ -49,10 +49,10 @@ def main(audio_file, save_path):
     # print("Assistant response:", response_text)
 
     # 3. 文本转语音
-    audio, sampling_rate = text_to_speech(response_text)
+    audio = text_to_speech(response_text)
 
     # 4. 保存语音到指定目录
-    save_audio(audio, sampling_rate, save_path)
+    save_audio(audio, save_path)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Speech to Speech Assistant")
