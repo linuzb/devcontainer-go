@@ -42,12 +42,14 @@ def save_audio(audio, save_path):
     if not (0 < sampling_rate <= 192000):
         raise ValueError(f"Invalid sampling rate: {sampling_rate}")
 
-    # 检查音频数据是否在有效范围内
-    if not np.all((audio_data >= -32768) & (audio_data <= 32767)):
-        raise ValueError("Audio data contains values out of range for int16")
+    # 检查音频数据是否在有效范围内，并转换为一维数组
+    if audio_data.ndim == 2 and audio_data.shape[0] == 1:
+        audio_data = audio_data.flatten()
 
     # 将数据类型转换为 int16
-    audio_data = audio_data.astype(np.int16)
+    if audio_data.dtype != np.int16:
+        # 假设音频数据在 [-1, 1] 范围内，进行缩放和转换
+        audio_data = (audio_data * 32767).astype(np.int16)
 
     # 保存生成的音频文件
     scipy.io.wavfile.write(save_path, rate=sampling_rate, data=audio_data)
