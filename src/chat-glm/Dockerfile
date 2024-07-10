@@ -1,4 +1,5 @@
-FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu22.04
+# FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu22.04
+FROM ubuntu:22.04
 
 WORKDIR /workspace
 
@@ -6,6 +7,7 @@ RUN apt-get update --yes \
     && apt-get install --yes --no-install-recommends \
     python3 \
     python3-pip \
+    ffmpeg \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
