@@ -1,4 +1,4 @@
-transformers==4.30.2
+transformers
 cpm_kernels
 torch>=2.0
 gradio

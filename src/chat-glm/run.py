@@ -42,9 +42,11 @@ def main(audio_file, save_path):
     print("User input (speech to text):", input_txt)
 
     # 2. 对话生成
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    response_text = generate_response(input_txt, device)
-    print("Assistant response:", response_text)
+    response_text = input_txt
+
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # response_text = generate_response(input_txt, device)
+    # print("Assistant response:", response_text)
 
     # 3. 文本转语音
     audio, sampling_rate = text_to_speech(response_text)
