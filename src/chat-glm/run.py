@@ -23,9 +23,11 @@ def generate_response(input_txt, device):
 
 # 3. 文本转语音（Text to Speech）
 def text_to_speech(response_text):
-    text2audio_pipe = pipeline(model="suno/bark-small")
-    output = text2audio_pipe(response_text)
-    return output["audio"], output["sampling_rate"]
+    # https://huggingface.co/suno/bark-small
+    synthesiser = pipeline("text-to-speech", "suno/bark-small")
+    speech = synthesiser(response_text, forward_params={"do_sample": True})
+
+    return speech["audio"], speech["sampling_rate"]
 
 # 4. 保存语音到指定目录
 def save_audio(audio, sampling_rate, save_path):
