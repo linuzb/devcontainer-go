@@ -6,19 +6,14 @@ import soundfile as sf
 # 1. 语音转文本（Speech to Text）
 def speech_to_text(audio_file):
     transcriber = pipeline(model="openai/whisper-base")
-    input_txt = transcriber(audio_file)
-    return input_txt
+    result = transcriber(audio_file)
+    transcribed_text = result['text']
+    return transcribed_text
 
 # 2. 对话生成（Chat）
 def generate_response(input_txt, device):
     tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True)
     model = AutoModel.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True)
-
-    # 优先使用 GPU，如果没有则使用 CPU
-    if torch.cuda.is_available():
-        device = torch.device("cuda")
-    else:
-        device = torch.device("cpu")
 
     model.to(device)
     model.eval()
