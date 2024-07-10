@@ -1,4 +1,5 @@
 import argparse
+import torch
 from transformers import pipeline, AutoTokenizer, AutoModel
 import soundfile as sf
 
@@ -9,10 +10,22 @@ def speech_to_text(audio_file):
     return input_txt
 
 # 2. 对话生成（Chat）
-def generate_response(input_txt):
+def generate_response(input_txt, device):
     tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True)
-    model = AutoModel.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True).half().cuda()
-    model = model.eval()
+    model = AutoModel.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True)
+
+    # 优先使用 GPU，如果没有则使用 CPU
+    if "cuda" in device and torch.cuda.is_available():
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
+
+    model.to(device)
+    model.eval()
+
+    # 如果是 GPU，将输入也移动到 GPU
+    if device.type == "cuda":
+        input_txt = input_txt.cuda()
 
     response, history = model.chat(tokenizer, input_txt, history=[])
     return response
@@ -36,7 +49,8 @@ def main(audio_file, save_path):
     print("User input (speech to text):", input_txt)
 
     # 2. 对话生成
-    response_text = generate_response(input_txt)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    response_text = generate_response(input_txt, device)
     print("Assistant response:", response_text)
 
     # 3. 文本转语音
