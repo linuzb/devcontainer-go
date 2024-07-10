@@ -6,4 +6,4 @@ mdtex2html
 sentencepiece
 accelerate
 huggingface_hub
-soundfile
+scipy

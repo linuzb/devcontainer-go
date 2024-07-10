@@ -1,7 +1,7 @@
 import argparse
 import torch
 from transformers import pipeline, AutoTokenizer, AutoModel
-import soundfile as sf
+import scipy
 
 # 1. 语音转文本（Speech to Text）
 def speech_to_text(audio_file):
@@ -32,7 +32,7 @@ def text_to_speech(response_text):
 # 4. 保存语音到指定目录
 def save_audio(audio, sampling_rate, save_path):
     # 保存生成的音频文件
-    sf.write(save_path, audio, sampling_rate)
+    scipy.io.wavfile.write(save_path, rate=audio["sampling_rate"], data=audio["audio"])
     print(f"Saved generated audio to {save_path}")
 
 # 主函数，整合上述功能

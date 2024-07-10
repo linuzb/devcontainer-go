@@ -16,8 +16,8 @@ RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then pip3 --disable-pip-version-c
    && rm -rf /tmp/pip-tmp
 
 # download model
-RUN huggingface-cli download --resume-download THUDM/chatglm3-6b && \
-    huggingface-cli download --resume-download suno/bark-small && \
+# huggingface-cli download --resume-download THUDM/chatglm3-6b && \
+RUN huggingface-cli download --resume-download suno/bark-small && \
     huggingface-cli download --resume-download openai/whisper-base
 
 COPY run.py /workspace
