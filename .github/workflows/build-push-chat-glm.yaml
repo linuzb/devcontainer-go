@@ -61,11 +61,18 @@ jobs:
         id: docker_build_
         uses: docker/build-push-action@v2
         with:
-          push: true
+          push: false
           context: src/${{ env.WORKLOAD_TYPE }}
           # file: src/${{ env.WORKLOAD_TYPE }}/Dockerfile
           tags: |
             ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }}
 
       - name: test
-        run: docker run ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }} 
+        run: |
+            docker run \
+            -v ./:/data \
+            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }} \
+            python3 /workspace/run.py \
+            --audio_file="https://huggingface.co/datasets/Narsil/asr_dummy/resolve/main/1.flac" \
+            --save_path="/data/output.flac"
+            ls /data/output.flac
