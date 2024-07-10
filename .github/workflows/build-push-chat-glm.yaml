@@ -6,6 +6,7 @@ on:
     - 'feat/**'
     paths:
     - 'src/chat-glm/**'
+    - '.github/workflows/build-push-chat-glm.yaml'
   workflow_dispatch:
 
 env:
