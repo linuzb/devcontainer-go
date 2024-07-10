@@ -2,6 +2,7 @@ import argparse
 import torch
 from transformers import pipeline, AutoTokenizer, AutoModel
 import scipy
+import numpy as np
 
 # 1. 语音转文本（Speech to Text）
 def speech_to_text(audio_file):
@@ -27,13 +28,31 @@ def text_to_speech(response_text):
     synthesiser = pipeline("text-to-speech", "suno/bark-small")
     speech = synthesiser(response_text, forward_params={"do_sample": True})
 
+    # 调试信息
+    print(f"Generated speech: sampling_rate={speech['sampling_rate']}, audio_shape={speech['audio'].shape}, audio_dtype={speech['audio'].dtype}")
+
     return speech
 
 # 4. 保存语音到指定目录
 def save_audio(audio, save_path):
+    sampling_rate = audio["sampling_rate"]
+    audio_data = audio["audio"]
+
+    # 检查采样率是否在有效范围内
+    if not (0 < sampling_rate <= 192000):
+        raise ValueError(f"Invalid sampling rate: {sampling_rate}")
+
+    # 检查音频数据是否在有效范围内
+    if not np.all((audio_data >= -32768) & (audio_data <= 32767)):
+        raise ValueError("Audio data contains values out of range for int16")
+
+    # 将数据类型转换为 int16
+    audio_data = audio_data.astype(np.int16)
+
     # 保存生成的音频文件
-    scipy.io.wavfile.write(save_path, rate=audio["sampling_rate"], data=audio["audio"])
+    scipy.io.wavfile.write(save_path, rate=sampling_rate, data=audio_data)
     print(f"Saved generated audio to {save_path}")
+
 
 # 主函数，整合上述功能
 def main(audio_file, save_path):

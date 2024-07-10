@@ -7,3 +7,4 @@ sentencepiece
 accelerate
 huggingface_hub
 scipy
+numpy
