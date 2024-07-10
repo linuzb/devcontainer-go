@@ -23,9 +23,6 @@ def generate_response(input_txt, device):
     model.to(device)
     model.eval()
 
-    # 如果是 GPU，将输入也移动到 GPU
-    input_txt = input_txt.to(device)
-
     response, history = model.chat(tokenizer, input_txt, history=[])
     return response
 
