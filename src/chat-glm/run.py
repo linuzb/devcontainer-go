@@ -15,7 +15,7 @@ def generate_response(input_txt, device):
     model = AutoModel.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True)
 
     # 优先使用 GPU，如果没有则使用 CPU
-    if "cuda" in device and torch.cuda.is_available():
+    if torch.cuda.is_available():
         device = torch.device("cuda")
     else:
         device = torch.device("cpu")
@@ -24,8 +24,7 @@ def generate_response(input_txt, device):
     model.eval()
 
     # 如果是 GPU，将输入也移动到 GPU
-    if device.type == "cuda":
-        input_txt = input_txt.cuda()
+    input_txt = input_txt.to(device)
 
     response, history = model.chat(tokenizer, input_txt, history=[])
     return response
