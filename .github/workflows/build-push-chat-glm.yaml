@@ -1,0 +1,79 @@
+name: 'Build chat-glm'
+on:
+  push:
+    branches:
+    - main
+    - 'feat/**'
+    paths:
+    - 'src/chat-glm/**'
+    - '.github/workflows/build-push-chat-glm.yaml'
+  workflow_dispatch:
+
+env:
+  TARGET_REGISTORY: docker.io
+  TARGET_NAMESPACE: levizebulon
+  TARGET_IMAGE: chat-glm
+  WORKLOAD_TYPE: chat-glm
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      # Image with CUDA needs extra disk space
+      - name: Free disk space 🧹
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
+      - name: Remove unnecessary files
+        run: |
+          echo "1 Free space:"
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          sudo rm -rf /opt/hostedtoolcache
+          echo "2 Free space:"
+          df -h
+
+      # git checkout code
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Use the git command to retrieve the current tag information and store it in the environment variable APP_VERSION.
+      - name: Generate App Version
+        run: echo APP_VERSION=`git describe --tags --always` >> $GITHUB_ENV
+
+      # 登录 docker hub
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.TARGET_REGISTORY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        id: docker_build_
+        uses: docker/build-push-action@v2
+        with:
+          push: false
+          context: src/${{ env.WORKLOAD_TYPE }}
+          # file: src/${{ env.WORKLOAD_TYPE }}/Dockerfile
+          tags: |
+            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }}
+
+      - name: test
+        run: |
+            docker run \
+            -v ./:/data \
+            ${{ env.TARGET_REGISTORY }}/${{ env.TARGET_NAMESPACE }}/${{ env.TARGET_IMAGE }}:${{ env.APP_VERSION }} \
+            python3 /workspace/run.py \
+            --audio_file="https://huggingface.co/datasets/Narsil/asr_dummy/resolve/main/1.flac" \
+            --save_path="/data/bark_out.wav"
+            ls bark_out.wav
