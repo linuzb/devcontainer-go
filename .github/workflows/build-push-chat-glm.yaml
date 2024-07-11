@@ -76,4 +76,4 @@ jobs:
             python3 /workspace/run.py \
             --audio_file="https://huggingface.co/datasets/Narsil/asr_dummy/resolve/main/1.flac" \
             --save_path="/data/bark_out.wav"
-            ls /data/bark_out.wav
+            ls bark_out.wav
