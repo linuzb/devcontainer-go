@@ -6,6 +6,7 @@ import numpy as np
 
 # 1. 语音转文本（Speech to Text）
 def speech_to_text(audio_file):
+    # https://huggingface.co/openai/whisper-base
     transcriber = pipeline(model="openai/whisper-base")
     result = transcriber(audio_file)
     transcribed_text = result['text']
@@ -13,6 +14,7 @@ def speech_to_text(audio_file):
 
 # 2. 对话生成（Chat）
 def generate_response(input_txt, device):
+    # https://huggingface.co/THUDM/chatglm3-6b
     tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True)
     model = AutoModel.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True)
 
@@ -63,11 +65,13 @@ def main(audio_file, save_path):
     print("User input (speech to text):", input_txt)
 
     # 2. 对话生成
-    response_text = input_txt
+    
+    # fake chat
+    # response_text = input_txt
 
-    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # response_text = generate_response(input_txt, device)
-    # print("Assistant response:", response_text)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    response_text = generate_response(input_txt, device)
+    print("Assistant response:", response_text)
 
     # 3. 文本转语音
     audio = text_to_speech(response_text)
