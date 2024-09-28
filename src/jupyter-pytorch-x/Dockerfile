@@ -1,8 +1,10 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG REGISTRY=quay.io
-ARG OWNER=jupyter
-ARG BASE_CONTAINER=$REGISTRY/$OWNER/scipy-notebook
+
+# registry quay.io does not has python-3.8, replace with dockerhub
+# ARG REGISTRY=quay.io
+# ARG OWNER=jupyter
+ARG BASE_CONTAINER=$OWNER/scipy-notebook:python-3.8.13
 FROM $BASE_CONTAINER
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
@@ -25,25 +27,36 @@ RUN apt-get update --yes \
     # git \
     zip \
     # unzip \
-    libopenmpi-dev \
+    # libopenmpi-dev \
     tmux \
-    screen \
+    # screen \
+    htop \
+    zsh \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installation de Code Server et server-proxy/vscode-proxy pour intégrer Code dans JupyterLab
 # Install VSCode extensions
-ENV CODE_VERSION=4.22.1
+
+# update code-server and add extension
+ENV CODE_VERSION=4.93.1
 RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb && \
     dpkg -i code-server_${CODE_VERSION}_amd64.deb && \
-    rm -f code-server_${CODE_VERSION}_amd64.deb
-    # EXT_LIST="ms-python.python zhuangtongfa.material-theme" && \
-    # for EXT in $EXT_LIST; do code-server --install-extension $EXT; done
+    rm -f code-server_${CODE_VERSION}_amd64.deb && \
+    EXT_LIST="ms-python.python ms-toolsai.jupyter equinusocio.vsc-material-theme" \
+    && for EXT in $EXT_LIST; do code-server --install-extension $EXT; done
 
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
 # COPY environment.yml noop.txt /tmp/conda-tmp/
 # RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
 #     && rm -rf /tmp/conda-tmp
+
+# install torch1.13.1 with built-in cuda runtime lib 11.6
+RUN pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cu116 \
+    torch==1.13.1+cu116 \
+    torchvision==0.14.1+cu116 && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
 
 # mamba/conda instsall
 RUN mamba install --yes \
