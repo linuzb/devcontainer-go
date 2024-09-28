@@ -1,17 +1,44 @@
-# https://pytorch.org/get-started/previous-versions/
---index-url https://download.pytorch.org/whl/cu118torch==1.12.0+cu116
-torch==2.2.1
-torchvision==0.17.1
-torchaudio==2.2.1 
+# # https://pytorch.org/get-started/previous-versions/
+# --index-url https://download.pytorch.org/whl/cu118torch==1.12.0+cu116
+# torch==2.2.1
+# torchvision==0.17.1
+# torchaudio==2.2.1 
 
---index-url https://pypi.org/simple
-mpi4py
-transformers==4.28.1
-icetk
-# peft https://github.com/artidoro/qlora/issues/154
-git+https://github.com/huggingface/peft
-deepspeed==0.9.2
-accelerate
-cpm_kernels
-sentencepiece==0.1.99
-bitsandbytes
+# --index-url https://pypi.org/simple
+# mpi4py
+# transformers==4.28.1
+# icetk
+# # peft https://github.com/artidoro/qlora/issues/154
+# git+https://github.com/huggingface/peft
+# deepspeed==0.9.2
+# accelerate
+# cpm_kernels
+# sentencepiece==0.1.99
+# bitsandbytes
+
+# zx env requirement
+numba
+numpy
+pandas
+rich
+scikit-learn
+scipy
+tensorboardX
+pillow
+munch
+rich
+loguru
+ipython
+seaborn
+torchinfo
+tqdm
+sacred
+ipykernel
+nvitop
+tensorboardX
+torch_geometric
+# for hyp2
+xlrd==1.2.0
+# for clip
+ftfy
+regex
