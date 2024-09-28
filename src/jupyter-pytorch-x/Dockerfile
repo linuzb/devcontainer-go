@@ -3,7 +3,7 @@
 
 # registry quay.io does not has python-3.8, replace with dockerhub
 # ARG REGISTRY=quay.io
-# ARG OWNER=jupyter
+ARG OWNER=jupyter
 ARG BASE_CONTAINER=$OWNER/scipy-notebook:python-3.8.13
 FROM $BASE_CONTAINER
 
